@@ -55,7 +55,7 @@ export default async function HomePage() {
                 25 Challenges
               </h3>
               <p className="mt-1 text-sm text-amber-200/60">
-                Complete achievements across fitness, community, and leadership. Write your own for the bottom row.
+                Complete achievements across fitness, community, and leadership.
               </p>
             </div>
             <div className="rounded-xl border border-[#3a4a2a] bg-[#2a3a1a] p-5">
