@@ -42,6 +42,7 @@ CREATE TABLE public.card_squares (
   completed BOOLEAN NOT NULL DEFAULT false,
   completed_at TIMESTAMPTZ,
   notes TEXT,
+  custom_title TEXT,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   UNIQUE (user_id, item_position)
 );

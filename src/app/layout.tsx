@@ -29,9 +29,17 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-gray-50">
+      <body className="min-h-full flex flex-col bg-[#1e2d14]">
         <Header />
         <main className="flex flex-1 flex-col">{children}</main>
+        <footer className="border-t border-[#3a4a2a] bg-[#1e2d14] py-4 text-center">
+          <p className="text-xs font-bold tracking-widest text-amber-200/40">
+            FITNESS. FELLOWSHIP. FAITH.
+          </p>
+          <p className="mt-1 text-xs text-amber-200/30">
+            ALL MEN. ALL FREE. ALL IN.
+          </p>
+        </footer>
       </body>
     </html>
   )

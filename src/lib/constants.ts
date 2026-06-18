@@ -13,6 +13,10 @@ export function isChallengeActive(): boolean {
   return now >= CHALLENGE_START && now <= CHALLENGE_END
 }
 
+export const WRITE_YOUR_OWN_POSITIONS = [20, 21, 22, 23, 24]
+
+export const COLUMN_HEADERS = ["B", "I", "N", "G", "O"]
+
 export const BINGO_ITEMS: { position: number; title: string }[] = [
   { position: 0, title: "Q'd a beatdown" },
   { position: 1, title: "Q'd 5 beatdowns" },
@@ -34,9 +38,9 @@ export const BINGO_ITEMS: { position: number; title: string }[] = [
   { position: 17, title: "Picked up a leadership role" },
   { position: 18, title: "EH'd a kotter" },
   { position: 19, title: "Attended a Convergence" },
-  { position: 20, title: "Led 30 for 30 or attended" },
-  { position: 21, title: "Attended a Q Source" },
-  { position: 22, title: "Posted in Pax Essay" },
-  { position: 23, title: "Shared a Social Media Post" },
-  { position: 24, title: "TBD" },
+  { position: 20, title: "Write Your Own" },
+  { position: 21, title: "Write Your Own" },
+  { position: 22, title: "Write Your Own" },
+  { position: 23, title: "Write Your Own" },
+  { position: 24, title: "Write Your Own" },
 ]

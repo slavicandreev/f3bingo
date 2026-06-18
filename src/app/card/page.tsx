@@ -24,7 +24,7 @@ export default async function CardPage() {
   if (!squares || squares.length === 0) {
     return (
       <div className="flex flex-1 items-center justify-center p-4">
-        <p className="text-gray-500">
+        <p className="text-amber-200/60">
           Setting up your bingo card... Please refresh the page.
         </p>
       </div>
@@ -45,9 +45,9 @@ export default async function CardPage() {
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-6">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">My Bingo Card</h1>
-        <p className="text-sm text-gray-500">
-          F3 Legacy Summer Bingo — July 1 to August 31, 2026
+        <h1 className="text-2xl font-black text-amber-100 tracking-wide">My Bingo Card</h1>
+        <p className="text-sm text-amber-200/50 font-medium tracking-wider">
+          F3 LEGACY SUMMER BINGO — JULY 1 TO AUGUST 31, 2026
         </p>
       </div>
       <BingoCard

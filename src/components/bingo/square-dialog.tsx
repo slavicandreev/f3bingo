@@ -3,13 +3,15 @@
 import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
+import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { X, Check, Undo2 } from "lucide-react"
-import { FREE_SPACE_POSITION } from "@/lib/constants"
+import { FREE_SPACE_POSITION, WRITE_YOUR_OWN_POSITIONS } from "@/lib/constants"
 
 type SquareData = {
   position: number
   title: string
+  customTitle: string | null
   completed: boolean
   completedAt: string | null
   notes: string | null
@@ -19,44 +21,57 @@ type Props = {
   square: SquareData | null
   onClose: () => void
   onToggle: (position: number, completed: boolean, notes?: string) => void
+  onUpdateCustomTitle: (position: number, customTitle: string) => void
   saving: boolean
+  readOnly?: boolean
 }
 
-export function SquareDialog({ square, onClose, onToggle, saving }: Props) {
+export function SquareDialog({ square, onClose, onToggle, onUpdateCustomTitle, saving, readOnly }: Props) {
   const [notes, setNotes] = useState("")
+  const [customTitle, setCustomTitle] = useState("")
   const backdropRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (square) {
       setNotes(square.notes ?? "")
+      setCustomTitle(square.customTitle ?? "")
     }
   }, [square])
 
   if (!square) return null
 
   const isFreeSpace = square.position === FREE_SPACE_POSITION
+  const isWriteYourOwn = WRITE_YOUR_OWN_POSITIONS.includes(square.position)
+  const displayTitle = isWriteYourOwn && square.customTitle
+    ? square.customTitle
+    : square.title
 
   function handleToggle() {
     if (isFreeSpace) return
     onToggle(square!.position, !square!.completed, notes || undefined)
   }
 
+  function handleSaveCustomTitle() {
+    if (!isWriteYourOwn) return
+    onUpdateCustomTitle(square!.position, customTitle)
+  }
+
   return (
     <div
       ref={backdropRef}
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60"
       onClick={(e) => {
         if (e.target === backdropRef.current) onClose()
       }}
     >
-      <div className="w-full max-w-md rounded-t-2xl sm:rounded-2xl bg-white p-6 shadow-xl animate-in slide-in-from-bottom sm:slide-in-from-bottom-0">
+      <div className="w-full max-w-md rounded-t-2xl sm:rounded-2xl bg-[#f5f0e0] p-6 shadow-xl animate-in">
         <div className="flex items-start justify-between mb-4">
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">
-              {square.title}
+            <h3 className="text-lg font-bold text-[#2a3a1a]">
+              {displayTitle}
             </h3>
             {square.completed && square.completedAt && (
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm text-[#6a6a4a] mt-1">
                 Completed{" "}
                 {new Date(square.completedAt).toLocaleDateString("en-US", {
                   month: "short",
@@ -68,16 +83,38 @@ export function SquareDialog({ square, onClose, onToggle, saving }: Props) {
           </div>
           <button
             onClick={onClose}
-            className="rounded-full p-1 hover:bg-gray-100"
+            className="rounded-full p-1 hover:bg-[#e5e0cc]"
           >
-            <X className="h-5 w-5 text-gray-400" />
+            <X className="h-5 w-5 text-[#6a6a4a]" />
           </button>
         </div>
 
-        {!isFreeSpace && (
+        {isFreeSpace && (
+          <p className="text-sm text-[#6a6a4a]">
+            This one&apos;s on us. The free space is automatically completed. SYITG!
+          </p>
+        )}
+
+        {!isFreeSpace && !readOnly && (
           <>
+            {isWriteYourOwn && (
+              <div className="mb-4">
+                <Label htmlFor="customTitle" className="text-[#3a3a2a]">
+                  Your challenge
+                </Label>
+                <Input
+                  id="customTitle"
+                  placeholder="Write your own challenge..."
+                  value={customTitle}
+                  onChange={(e) => setCustomTitle(e.target.value)}
+                  className="mt-1.5 border-[#c4b998] bg-white"
+                  onBlur={handleSaveCustomTitle}
+                />
+              </div>
+            )}
+
             <div className="mb-4">
-              <Label htmlFor="notes" className="text-gray-700">
+              <Label htmlFor="notes" className="text-[#3a3a2a]">
                 Notes (optional)
               </Label>
               <Textarea
@@ -85,7 +122,7 @@ export function SquareDialog({ square, onClose, onToggle, saving }: Props) {
                 placeholder="Add a note about this achievement..."
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                className="mt-1.5"
+                className="mt-1.5 border-[#c4b998] bg-white"
                 rows={3}
               />
             </div>
@@ -94,7 +131,7 @@ export function SquareDialog({ square, onClose, onToggle, saving }: Props) {
               {square.completed ? (
                 <Button
                   variant="outline"
-                  className="flex-1"
+                  className="flex-1 border-[#c4b998] text-[#3a3a2a]"
                   onClick={handleToggle}
                   disabled={saving}
                 >
@@ -103,7 +140,7 @@ export function SquareDialog({ square, onClose, onToggle, saving }: Props) {
                 </Button>
               ) : (
                 <Button
-                  className="flex-1 bg-green-600 hover:bg-green-700"
+                  className="flex-1 bg-[#4a5c3a] hover:bg-[#3a4a2a] text-amber-50"
                   onClick={handleToggle}
                   disabled={saving}
                 >
@@ -115,10 +152,15 @@ export function SquareDialog({ square, onClose, onToggle, saving }: Props) {
           </>
         )}
 
-        {isFreeSpace && (
-          <p className="text-sm text-gray-500">
-            This one&apos;s on us. The free space is automatically completed.
-          </p>
+        {!isFreeSpace && readOnly && (
+          <>
+            {square.notes && (
+              <p className="text-sm text-[#6a6a4a] italic">&quot;{square.notes}&quot;</p>
+            )}
+            {!square.completed && (
+              <p className="text-sm text-[#8a7a5a]">Not yet completed</p>
+            )}
+          </>
         )}
       </div>
     </div>

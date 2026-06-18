@@ -16,7 +16,12 @@ export function SignOutButton() {
   }
 
   return (
-    <Button variant="ghost" size="sm" onClick={handleSignOut}>
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={handleSignOut}
+      className="text-amber-200/80 hover:text-amber-100 hover:bg-[#3a4a2a]"
+    >
       <LogOut className="h-4 w-4" />
       <span className="hidden sm:inline">Sign Out</span>
     </Button>

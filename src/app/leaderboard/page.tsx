@@ -32,16 +32,16 @@ export default async function LeaderboardPage() {
   return (
     <div className="mx-auto w-full max-w-2xl px-4 py-6">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Leaderboard</h1>
-        <p className="text-sm text-gray-500">
-          Top {LEADERBOARD_SIZE} PAX — Top {PATCH_WINNERS} earn F3 Legacy patches
+        <h1 className="text-2xl font-black text-amber-100 tracking-wide">Leaderboard</h1>
+        <p className="text-sm text-amber-200/50 font-medium tracking-wider">
+          TOP {LEADERBOARD_SIZE} PAX — TOP {PATCH_WINNERS} EARN F3 LEGACY PATCHES
         </p>
       </div>
 
       {leaderboard.length === 0 ? (
-        <div className="rounded-lg border border-gray-200 bg-white p-8 text-center">
-          <Trophy className="mx-auto h-10 w-10 text-gray-300" />
-          <p className="mt-3 text-gray-500">
+        <div className="rounded-lg border border-[#3a4a2a] bg-[#2a3a1a] p-8 text-center">
+          <Trophy className="mx-auto h-10 w-10 text-amber-200/30" />
+          <p className="mt-3 text-amber-200/50">
             No completions yet. Be the first to get on the board!
           </p>
         </div>
@@ -57,25 +57,25 @@ export default async function LeaderboardPage() {
               <Link
                 key={entry.user_id}
                 href={`/pax/${entry.user_id}`}
-                className={`flex items-center gap-4 rounded-lg border p-4 transition-colors hover:bg-gray-50 ${
+                className={`flex items-center gap-4 rounded-lg border p-4 transition-colors ${
                   isPatchContender
-                    ? "border-yellow-200 bg-yellow-50/50"
-                    : "border-gray-200 bg-white"
-                } ${isCurrentUser ? "ring-2 ring-blue-400 ring-offset-1" : ""}`}
+                    ? "border-amber-500/30 bg-amber-900/20 hover:bg-amber-900/30"
+                    : "border-[#3a4a2a] bg-[#2a3a1a] hover:bg-[#344428]"
+                } ${isCurrentUser ? "ring-2 ring-amber-400 ring-offset-1 ring-offset-[#1e2d14]" : ""}`}
               >
                 <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center">
                   {style ? (
                     <style.icon
                       className={`h-6 w-6 ${
                         rank === 1
-                          ? "text-yellow-500"
+                          ? "text-yellow-400"
                           : rank === 2
-                          ? "text-gray-400"
-                          : "text-amber-700"
+                          ? "text-gray-300"
+                          : "text-amber-600"
                       }`}
                     />
                   ) : (
-                    <span className="text-lg font-bold text-gray-400">
+                    <span className="text-lg font-bold text-amber-200/40">
                       {rank}
                     </span>
                   )}
@@ -83,14 +83,14 @@ export default async function LeaderboardPage() {
 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold text-gray-900 truncate">
+                    <span className="font-bold text-amber-100 truncate">
                       {entry.display_name}
                     </span>
                     {isCurrentUser && (
-                      <Badge variant="secondary">You</Badge>
+                      <Badge variant="secondary" className="bg-[#4a5c3a] text-amber-200 border-0">You</Badge>
                     )}
                   </div>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-amber-200/50">
                     {entry.completed_count} square
                     {entry.completed_count !== 1 ? "s" : ""} completed
                   </p>

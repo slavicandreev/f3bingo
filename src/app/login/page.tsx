@@ -8,10 +8,10 @@ export const metadata = {
 export default function LoginPage() {
   return (
     <div className="flex flex-1 items-center justify-center px-4 py-12">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md bg-[#f5f0e0] border-[#c4b998]">
         <CardHeader className="text-center">
-          <CardTitle>Welcome Back</CardTitle>
-          <CardDescription>Sign in to your F3 Bingo account</CardDescription>
+          <CardTitle className="text-[#2a3a1a]">Welcome Back</CardTitle>
+          <CardDescription className="text-[#6a6a4a]">Sign in to your F3 Bingo account</CardDescription>
         </CardHeader>
         <CardContent>
           <LoginForm />
