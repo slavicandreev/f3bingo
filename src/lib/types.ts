@@ -21,7 +21,6 @@ export type CardSquare = {
   completed: boolean
   completed_at: string | null
   notes: string | null
-  custom_title: string | null
   updated_at: string
 }
 

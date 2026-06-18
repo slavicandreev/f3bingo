@@ -5,14 +5,13 @@ import { BingoSquare } from "./bingo-square"
 import { SquareDialog } from "./square-dialog"
 import { PrizeProgress } from "./prize-progress"
 import { getLinePositions } from "@/lib/bingo"
-import { toggleSquare, updateCustomTitle } from "@/app/card/actions"
-import { GRID_SIZE, TOTAL_SQUARES, COLUMN_HEADERS, WRITE_YOUR_OWN_POSITIONS } from "@/lib/constants"
+import { toggleSquare } from "@/app/card/actions"
+import { TOTAL_SQUARES, COLUMN_HEADERS } from "@/lib/constants"
 import type { CardSquare, BingoItem } from "@/lib/types"
 
 type SquareWithItem = {
   position: number
   title: string
-  customTitle: string | null
   completed: boolean
   completedAt: string | null
   notes: string | null
@@ -33,7 +32,6 @@ export function BingoCard({ squares, leaderboardRank, readOnly = false }: Props)
     .map((sq) => ({
       position: sq.item_position,
       title: sq.bingo_items.title,
-      customTitle: sq.custom_title,
       completed: sq.completed,
       completedAt: sq.completed_at,
       notes: sq.notes,
@@ -41,17 +39,14 @@ export function BingoCard({ squares, leaderboardRank, readOnly = false }: Props)
 
   const [optimisticSquares, setOptimisticSquare] = useOptimistic(
     sortedSquares,
-    (state, update: { position: number; completed?: boolean; notes?: string; customTitle?: string }) =>
+    (state, update: { position: number; completed: boolean; notes?: string }) =>
       state.map((sq) =>
         sq.position === update.position
           ? {
               ...sq,
-              ...(update.completed !== undefined && {
-                completed: update.completed,
-                completedAt: update.completed ? new Date().toISOString() : null,
-              }),
-              ...(update.notes !== undefined && { notes: update.notes }),
-              ...(update.customTitle !== undefined && { customTitle: update.customTitle }),
+              completed: update.completed,
+              completedAt: update.completed ? new Date().toISOString() : null,
+              notes: update.notes ?? sq.notes,
             }
           : sq
       )
@@ -74,14 +69,6 @@ export function BingoCard({ squares, leaderboardRank, readOnly = false }: Props)
     })
   }
 
-  function handleUpdateCustomTitle(position: number, customTitle: string) {
-    if (!WRITE_YOUR_OWN_POSITIONS.includes(position)) return
-    startTransition(async () => {
-      setOptimisticSquare({ position, customTitle })
-      await updateCustomTitle(position, customTitle)
-    })
-  }
-
   return (
     <div className="space-y-4">
       <PrizeProgress
@@ -92,7 +79,6 @@ export function BingoCard({ squares, leaderboardRank, readOnly = false }: Props)
 
       <div className="mx-auto w-full max-w-[420px]">
         <div className="rounded-lg overflow-hidden border-2 border-[#4a5c3a] shadow-lg">
-          {/* BINGO header */}
           <div className="grid grid-cols-5 bg-[#4a5c3a]">
             {COLUMN_HEADERS.map((letter) => (
               <div
@@ -104,14 +90,12 @@ export function BingoCard({ squares, leaderboardRank, readOnly = false }: Props)
             ))}
           </div>
 
-          {/* Grid */}
           <div className="grid grid-cols-5 gap-px bg-[#c4b998]">
             {optimisticSquares.map((square) => (
               <BingoSquare
                 key={square.position}
                 position={square.position}
                 title={square.title}
-                customTitle={square.customTitle}
                 completed={square.completed}
                 notes={square.notes}
                 isInCompletedLine={linePositions.has(square.position)}
@@ -122,26 +106,13 @@ export function BingoCard({ squares, leaderboardRank, readOnly = false }: Props)
         </div>
       </div>
 
-      {!readOnly && (
-        <SquareDialog
-          square={selectedSquare}
-          onClose={() => setSelectedPosition(null)}
-          onToggle={handleToggle}
-          onUpdateCustomTitle={handleUpdateCustomTitle}
-          saving={isPending}
-        />
-      )}
-
-      {readOnly && (
-        <SquareDialog
-          square={selectedSquare}
-          onClose={() => setSelectedPosition(null)}
-          onToggle={() => {}}
-          onUpdateCustomTitle={() => {}}
-          saving={false}
-          readOnly
-        />
-      )}
+      <SquareDialog
+        square={selectedSquare}
+        onClose={() => setSelectedPosition(null)}
+        onToggle={readOnly ? () => {} : handleToggle}
+        saving={isPending}
+        readOnly={readOnly}
+      />
     </div>
   )
 }

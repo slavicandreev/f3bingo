@@ -1,13 +1,12 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { FREE_SPACE_POSITION, WRITE_YOUR_OWN_POSITIONS } from "@/lib/constants"
-import { Check, Star, Pencil } from "lucide-react"
+import { FREE_SPACE_POSITION } from "@/lib/constants"
+import { Check, Star } from "lucide-react"
 
 type Props = {
   position: number
   title: string
-  customTitle: string | null
   completed: boolean
   notes: string | null
   isInCompletedLine: boolean
@@ -17,15 +16,12 @@ type Props = {
 export function BingoSquare({
   position,
   title,
-  customTitle,
   completed,
   notes,
   isInCompletedLine,
   onClick,
 }: Props) {
   const isFreeSpace = position === FREE_SPACE_POSITION
-  const isWriteYourOwn = WRITE_YOUR_OWN_POSITIONS.includes(position)
-  const displayTitle = isWriteYourOwn && customTitle ? customTitle : title
 
   return (
     <button
@@ -49,7 +45,7 @@ export function BingoSquare({
         </div>
       )}
 
-      {isFreeSpace && (
+      {isFreeSpace ? (
         <>
           <div className="flex gap-0.5 mb-0.5">
             <Star className="h-2 w-2 text-amber-400 fill-amber-400" />
@@ -67,23 +63,12 @@ export function BingoSquare({
             SYITG
           </span>
         </>
-      )}
-
-      {!isFreeSpace && isWriteYourOwn && !customTitle && (
-        <>
-          <Pencil className="h-4 w-4 text-[#8a7a5a] mb-0.5" />
-          <span className="text-[9px] sm:text-[10px] font-medium leading-tight text-[#8a7a5a]">
-            Write Your Own
-          </span>
-        </>
-      )}
-
-      {!isFreeSpace && !(isWriteYourOwn && !customTitle) && (
+      ) : (
         <span className={cn(
           "text-[9px] sm:text-[11px] font-semibold leading-tight line-clamp-4 px-0.5",
           completed ? "text-amber-50" : "text-[#3a3a2a]"
         )}>
-          {displayTitle}
+          {title}
         </span>
       )}
 

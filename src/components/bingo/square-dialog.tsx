@@ -3,15 +3,13 @@
 import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { X, Check, Undo2 } from "lucide-react"
-import { FREE_SPACE_POSITION, WRITE_YOUR_OWN_POSITIONS } from "@/lib/constants"
+import { FREE_SPACE_POSITION } from "@/lib/constants"
 
 type SquareData = {
   position: number
   title: string
-  customTitle: string | null
   completed: boolean
   completedAt: string | null
   notes: string | null
@@ -21,39 +19,27 @@ type Props = {
   square: SquareData | null
   onClose: () => void
   onToggle: (position: number, completed: boolean, notes?: string) => void
-  onUpdateCustomTitle: (position: number, customTitle: string) => void
   saving: boolean
   readOnly?: boolean
 }
 
-export function SquareDialog({ square, onClose, onToggle, onUpdateCustomTitle, saving, readOnly }: Props) {
+export function SquareDialog({ square, onClose, onToggle, saving, readOnly }: Props) {
   const [notes, setNotes] = useState("")
-  const [customTitle, setCustomTitle] = useState("")
   const backdropRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (square) {
       setNotes(square.notes ?? "")
-      setCustomTitle(square.customTitle ?? "")
     }
   }, [square])
 
   if (!square) return null
 
   const isFreeSpace = square.position === FREE_SPACE_POSITION
-  const isWriteYourOwn = WRITE_YOUR_OWN_POSITIONS.includes(square.position)
-  const displayTitle = isWriteYourOwn && square.customTitle
-    ? square.customTitle
-    : square.title
 
   function handleToggle() {
     if (isFreeSpace) return
     onToggle(square!.position, !square!.completed, notes || undefined)
-  }
-
-  function handleSaveCustomTitle() {
-    if (!isWriteYourOwn) return
-    onUpdateCustomTitle(square!.position, customTitle)
   }
 
   return (
@@ -68,7 +54,7 @@ export function SquareDialog({ square, onClose, onToggle, onUpdateCustomTitle, s
         <div className="flex items-start justify-between mb-4">
           <div>
             <h3 className="text-lg font-bold text-[#2a3a1a]">
-              {displayTitle}
+              {square.title}
             </h3>
             {square.completed && square.completedAt && (
               <p className="text-sm text-[#6a6a4a] mt-1">
@@ -97,22 +83,6 @@ export function SquareDialog({ square, onClose, onToggle, onUpdateCustomTitle, s
 
         {!isFreeSpace && !readOnly && (
           <>
-            {isWriteYourOwn && (
-              <div className="mb-4">
-                <Label htmlFor="customTitle" className="text-[#3a3a2a]">
-                  Your challenge
-                </Label>
-                <Input
-                  id="customTitle"
-                  placeholder="Write your own challenge..."
-                  value={customTitle}
-                  onChange={(e) => setCustomTitle(e.target.value)}
-                  className="mt-1.5 border-[#c4b998] bg-white"
-                  onBlur={handleSaveCustomTitle}
-                />
-              </div>
-            )}
-
             <div className="mb-4">
               <Label htmlFor="notes" className="text-[#3a3a2a]">
                 Notes (optional)

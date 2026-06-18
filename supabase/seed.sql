@@ -20,8 +20,8 @@ INSERT INTO public.bingo_items (position, title) VALUES
 (17, 'Picked up a leadership role'),
 (18, 'EH''d a kotter'),
 (19, 'Attended a Convergence'),
-(20, 'Write Your Own'),
-(21, 'Write Your Own'),
-(22, 'Write Your Own'),
-(23, 'Write Your Own'),
-(24, 'Write Your Own');
+(20, 'Led 30 for 30 or attended'),
+(21, 'Attended a Q Source'),
+(22, 'Posted in Pax Essay'),
+(23, 'Shared a Social Media Post'),
+(24, 'Completed a Ruck');
