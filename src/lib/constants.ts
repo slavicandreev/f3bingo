@@ -34,7 +34,7 @@ export const BINGO_ITEMS: { position: number; title: string }[] = [
   { position: 15, title: "Posted in all 3 Legacy Regions" },
   { position: 16, title: "Posted Downrange" },
   { position: 17, title: "Picked up a leadership role" },
-  { position: 18, title: "EH'd a kotter" },
+  { position: 18, title: "Reached out to a kotter" },
   { position: 19, title: "Attended a Convergence" },
   { position: 20, title: "Led 30 for 30 or attended" },
   { position: 21, title: "Attended a Q Source" },

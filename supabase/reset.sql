@@ -155,7 +155,7 @@ INSERT INTO public.bingo_items (position, title) VALUES
 (15, 'Posted in all 3 Legacy Regions'),
 (16, 'Posted Downrange'),
 (17, 'Picked up a leadership role'),
-(18, 'EH''d a kotter'),
+(18, 'Reached out to a kotter'),
 (19, 'Attended a Convergence'),
 (20, 'Led 30 for 30 or attended'),
 (21, 'Attended a Q Source'),
